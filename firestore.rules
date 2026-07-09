@@ -1,0 +1,106 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Check if the user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Check if user is an admin
+    function isAdmin() {
+      return isAuth() && (
+        request.auth.token.role == 'ADMIN' || 
+        request.auth.token.role == 'admin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // Check if user owns the document or userId matches
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // USERS COLLECTION
+    match /users/{userId} {
+      allow read: if isAuth();
+      allow create: if true; // Enable user registration
+      allow update, delete: if isOwner(userId) || isAdmin();
+    }
+
+    // CREATOR PROFILES
+    match /creatorProfiles/{profileId} {
+      allow read: if true;
+      allow create: if isAuth() || profileId.startsWith('creator_');
+      allow update, delete: if isAdmin() || (isAuth() && (resource.data.userId == request.auth.uid || profileId == request.auth.uid));
+    }
+
+    // PRODUCTS
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAuth() || productId.startsWith('prod_');
+      allow update, delete: if isAdmin() || (isAuth() && (resource.data.artistId == request.auth.uid || resource.data.userId == request.auth.uid));
+    }
+
+    // CATEGORIES
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() || categoryId in ['cat_1', 'cat_2', 'cat_3', 'cat_4'];
+    }
+
+    // ORDERS
+    match /orders/{orderId} {
+      allow read: if isAuth() && (resource.data.buyerId == request.auth.uid || resource.data.sellerId == request.auth.uid || isAdmin());
+      allow create: if isAuth();
+      allow update, delete: if isAdmin();
+    }
+
+    // REVIEWS
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.buyerId == request.auth.uid);
+    }
+
+    // MESSAGES
+    match /messages/{messageId} {
+      allow read: if isAuth() && (resource.data.senderId == request.auth.uid || resource.data.receiverId == request.auth.uid || isAdmin());
+      allow create: if isAuth();
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.senderId == request.auth.uid);
+    }
+
+    // NOTIFICATIONS
+    match /notifications/{notificationId} {
+      allow read: if isAuth() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuth();
+      allow update, delete: if isAuth() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // FOLLOWERS
+    match /followers/{followerId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.userId == request.auth.uid);
+    }
+
+    // WISHLISTS
+    match /wishlists/{wishlistId} {
+      allow read: if isAuth() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if isAuth() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // JOURNALS
+    match /journals/{journalId} {
+      allow read: if true;
+      allow create: if isAuth() || journalId.startsWith('j_');
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
+    }
+
+    // COLLECTIONS
+    match /collections/{collectionId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Artora",
+  "description": "Premium marketplace and creative community for original art and handmade craft.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

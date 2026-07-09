@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents an authenticated user profile within Artora.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["buyer", "creator", "both", "admin"] },
+        "avatarUrl": { "type": "string" },
+        "phone": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "role"]
+    },
+    "CreatorProfile": {
+      "title": "Creator Profile",
+      "description": "Artisan/Creator specific extended details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "bio": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "joinedAt": { "type": "string", "format": "date-time" },
+        "rating": { "type": "number" },
+        "ratingCount": { "type": "integer" },
+        "sales": { "type": "integer" },
+        "badgeLevel": { "type": "string", "enum": ["ESTABLISHED", "ELITE", "LEGENDARY"] }
+      },
+      "required": ["id", "userId", "name"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Premium fine-art creations and physical masterpieces listed on the marketplace.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "category": { "type": "string" },
+        "artistId": { "type": "string" },
+        "artistName": { "type": "string" },
+        "views": { "type": "integer" },
+        "status": { "type": "string", "enum": ["Draft", "Published", "Sold"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "price", "artistId", "status"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Marketplace category classifications for artworks.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["id", "name", "slug"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Record of masterwork transactions and custom commissions.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Preparing", "Shipped", "Delivered", "Cancelled"] },
+        "date": { "type": "string" },
+        "address": { "type": "string" },
+        "tracking": { "type": "string" },
+        "deliveryEst": { "type": "string" }
+      },
+      "required": ["id", "buyerId", "sellerId", "total", "status"]
+    },
+    "Journal": {
+      "title": "Journal",
+      "description": "Behind-the-scenes logs and creative progress stories posted by creators.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "title": { "type": "string" },
+        "story": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "likes": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "creatorId", "title", "story"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Secure, physical studio direct communication thread entries.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "image": { "type": "string" },
+        "productId": { "type": "string" }
+      },
+      "required": ["id", "senderId", "receiverId", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles database partitioned by Firebase Auth UID."
+    },
+    "/creatorProfiles/{profileId}": {
+      "schema": "CreatorProfile",
+      "description": "Artisan business specifications and portfolios."
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Product directory of listed creative items."
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Master classification lookup."
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Bespoke transaction log."
+    },
+    "/journals/{journalId}": {
+      "schema": "Journal",
+      "description": "Studio logs published by creators."
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Studio to patron messaging ledger."
+    }
+  }
+}
