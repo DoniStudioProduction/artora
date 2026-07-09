@@ -54,10 +54,10 @@ export default function AuthPages({ onBackToHome, onLoginSuccess, onRegisterSucc
       setSignUpError("Please enter a valid email address.");
       return;
     }
-    if (phoneNumber.length < 7) {
-      setSignUpError("Please enter a valid phone number.");
-      return;
-    }
+    if (phoneNumber && phoneNumber.length < 7) {
+  setSignUpError("Please enter a valid phone number.");
+  return;
+}
     if (password.length < 6) {
       setSignUpError("Password must be at least 6 characters.");
       return;
