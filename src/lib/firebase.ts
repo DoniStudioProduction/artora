@@ -5,12 +5,12 @@ import { getStorage } from "firebase/storage";
 
 // Fallback credentials auto-loaded from firebase-applet-config.json
 const FALLBACK_CONFIG = {
-  apiKey: "AIzaSyBwKLKx9LlQYdVXwWoIA14FcrYHb_hGOZc",
-  authDomain: "gen-lang-client-0578986167.firebaseapp.com",
-  projectId: "gen-lang-client-0578986167",
-  storageBucket: "gen-lang-client-0578986167.firebasestorage.app",
-  messagingSenderId: "157804208166",
-  appId: "1:157804208166:web:862ef212e70378421686e7"
+  apiKey: "AIzaSyCBbJ2i36vem8Hj1ajpvHMPE4fBkbzcXFI",
+  authDomain: "artora-40b7b.firebaseapp.com",
+  projectId: "artora-40b7b",
+  storageBucket: "artora-40b7b.firebasestorage.app",
+  messagingSenderId: "547938073307",
+  appId: "1:547938073307:web:d1ce987f80418521a62afe"
 };
 
 const env = (import.meta as any).env || {};
