@@ -504,7 +504,10 @@ export default function Navbar({
             {/* Profile */}
             {user ? (
               <div className="relative group">
-                <button className="flex items-center space-x-2 py-1 focus:outline-none">
+                <button
+  onClick={() => onNavigate("dashboard")}
+  className="flex items-center space-x-2 py-1 focus:outline-none"
+>
                   <img
                     src={user.avatar}
                     alt={user.name}
