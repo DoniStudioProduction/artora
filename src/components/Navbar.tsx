@@ -447,7 +447,7 @@ export default function Navbar({
             {/* Notifications */}
             {user && (
               <div className="relative group">
-                <button className="text-[#111111] hover:text-[#C9A227] p-2 rounded-full hover:bg-[#111111]/5 transition relative" aria-label="Notifications">
+                <button onClick={() => setIsNotificationOpen(!isNotificationOpen)} className="text-[#111111] hover:text-[#C9A227] p-2 rounded-full hover:bg-[#111111]/5 transition relative" aria-label="Notifications">
                   <Bell className="w-5 h-5" />
                   {notifications.some(n => n.unread) && (
                     <span className="absolute top-1 right-1 bg-[#C9A227] w-2 h-2 rounded-full ring-2 ring-[#F8F8F6]" />
